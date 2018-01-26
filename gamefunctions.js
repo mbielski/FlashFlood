@@ -1,12 +1,13 @@
-﻿var Colors = ["red", "pink", "purple", "blue", "yellow", "green"];
-var SelectorsEnabled = true;
-var ScoreArray = [671088640, 335544320, 167772160, 83886080, 41943040, 20971520, 10485760, 5242880, 2621440, 1310720, 655360, 327680, 163840, 81920, 40960, 20480, 10240, 5120, 2560, 1280, 640, 320, 160, 80, 40, 20];
+﻿var Colors = ["red", "pink", "purple", "blue", "yellow", "green"],
+	SelectorsEnabled = true,
+	BoardSize = 14,
+    ScoreArray = [671088640, 335544320, 167772160, 83886080, 41943040, 20971520, 10485760, 5242880, 2621440, 1310720, 655360, 327680, 163840, 81920, 40960, 20480, 10240, 5120, 2560, 1280, 640, 320, 160, 80, 40, 20];
 
 function ResetBoard(){
 	ClearAlert();
 	var Board = document.getElementById("GameBoard");
-	for (var BoardTR = 0; BoardTR < Board.rows.length; BoardTR++){
-		for (var BoardTD = 0; BoardTD < Board.rows[BoardTR].cells.length; BoardTD++){
+	for (var BoardTR = 0; BoardTR < BoardSize; BoardTR++){
+		for (var BoardTD = 0; BoardTD < BoardSize; BoardTD++){
 			var ThisCell = Board.rows[BoardTR].cells[BoardTD];
 			ThisCell.className = Colors[Math.floor(Math.random() * 6)];
 		}
@@ -16,7 +17,7 @@ function ResetBoard(){
 }
 
 function CheckBelow(RowID, ColumnID, ColorToUse, ColorToCheck){
-	if (RowID + 1 < 14){
+	if (RowID + 1 < BoardSize){
 		var CellBelow = document.getElementById("GameBoard").rows[RowID + 1].cells[ColumnID];
 		if (CellBelow.className == ColorToCheck && CellBelow.className != ColorToUse){
 			CellBelow.className = ColorToUse;
@@ -55,7 +56,7 @@ function CheckLeft(RowID, ColumnID, ColorToUse, ColorToCheck){
 }
 
 function CheckRight(RowID, ColumnID, ColorToUse, ColorToCheck){
-	if (ColumnID + 1 < 14){
+	if (ColumnID + 1 < BoardSize){
 		var CellRight = document.getElementById("GameBoard").rows[RowID].cells[ColumnID + 1];
 		if (CellRight.className == ColorToCheck && CellRight.className != ColorToUse){
 			CellRight.className = ColorToUse;
@@ -71,8 +72,8 @@ function BoardFlooded(ColorToCheck){
 	var Board = document.getElementById("GameBoard");
 	var IsFlooded = true;
 
-	for (var BoardTR = 0; BoardTR < Board.rows.length; BoardTR++){
-		for (var BoardTD = 0; BoardTD < Board.rows[BoardTR].cells.length; BoardTD++){
+	for (var BoardTR = 0; BoardTR < BoardSize; BoardTR++){
+		for (var BoardTD = 0; BoardTD < BoardSize; BoardTD++){
 			if (Board.rows[BoardTR].cells[BoardTD].className != ColorToCheck){
 				IsFlooded = false;
 			}
@@ -143,7 +144,6 @@ $(document).ready(function(){
 					Loser();
 				}
 			}
-
 		}
 	});
 });
