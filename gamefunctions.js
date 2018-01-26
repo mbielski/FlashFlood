@@ -95,6 +95,51 @@ function Winner(){
 	$("#winner").removeClass("hide");
 }
 
+function ColorSelection(theCell){
+	var HomeCell = document.getElementById("GameBoard").rows[0].cells[0];
+	if (HomeCell.className != theCell.className && SelectorsEnabled){
+		CheckBelow(0, 0, theCell.className, HomeCell.className);
+		CheckRight(0, 0, theCell.className, HomeCell.className);
+		HomeCell.className = theCell.className;
+		var ClickTotal = parseInt($("#Counter").text());
+		ClickTotal++;
+		$("#Counter").text(ClickTotal);
+		var GamesPlayed = document.getElementById("GamesPlayed");
+		var GamesWon = document.getElementById("GamesWon");
+		var GamesLost = document.getElementById("GamesLost");
+		if (BoardFlooded(theCell.className)){
+			//winner
+			SelectorsEnabled = false;
+			TotalScore.innerHTML = parseInt(TotalScore.innerHTML) + ScoreArray[ClickTotal];
+			var LastScore = document.getElementById("LastScore");
+			LastScore.innerHTML = ScoreArray[ClickTotal];
+			GamesWon.innerHTML = parseInt(GamesWon.innerHTML) + 1;
+			GamesPlayed.innerHTML = parseInt(GamesPlayed.innerHTML) + 1;
+			var WonPercent = (parseInt(GamesWon.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
+			document.getElementById("WonPercent").innerHTML = WonPercent.toFixed(1);
+			var LostPercent = (parseInt(GamesLost.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
+			document.getElementById("LostPercent").innerHTML = LostPercent.toFixed(1);
+			var HighScore = document.getElementById("HighScore");
+			if (ScoreArray[ClickTotal] > parseInt(HighScore.innerHTML)){
+				HighScore.innerHTML = ScoreArray[ClickTotal];
+			}
+			Winner();
+		} else {
+			if (ClickTotal == 25){
+				//game over
+				SelectorsEnabled = false;
+				GamesLost.innerHTML = parseInt(GamesLost.innerHTML) + 1;
+				GamesPlayed.innerHTML = parseInt(GamesPlayed.innerHTML) + 1;
+				var WonPercent = (parseInt(GamesWon.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
+				document.getElementById("WonPercent").innerHTML = WonPercent.toFixed(1);
+				var LostPercent = (parseInt(GamesLost.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
+				document.getElementById("LostPercent").innerHTML = LostPercent.toFixed(1);
+				Loser();
+			}
+		}
+	}
+}
+
 $(document).ready(function(){
 	ResetBoard();
 	$("#resetBoard").click(function(){ResetBoard();});
@@ -102,48 +147,5 @@ $(document).ready(function(){
 	$("#noPlayFromLoss").click(function(){ClearAlert();});
 	$("#playFromWin").click(function(){ResetBoard();});
 	$("#noPlayFromWin").click(function(){ClearAlert();});
-	$("table.Layout tr td.colors table.choices tr td").not("table.Layout tr td.colors table.choices tr td.spacer").click(function(){
-		var HomeCell = document.getElementById("GameBoard").rows[0].cells[0];
-		if (HomeCell.className != this.className && SelectorsEnabled){
-			CheckBelow(0, 0, this.className, HomeCell.className);
-			CheckRight(0, 0, this.className, HomeCell.className);
-			HomeCell.className = this.className;
-			var ClickTotal = parseInt($("#Counter").text());
-			ClickTotal++;
-			$("#Counter").text(ClickTotal);
-			var GamesPlayed = document.getElementById("GamesPlayed");
-			var GamesWon = document.getElementById("GamesWon");
-			var GamesLost = document.getElementById("GamesLost");
-			if (BoardFlooded(this.className)){
-				//winner
-				SelectorsEnabled = false;
-				TotalScore.innerHTML = parseInt(TotalScore.innerHTML) + ScoreArray[ClickTotal];
-				var LastScore = document.getElementById("LastScore");
-				LastScore.innerHTML = ScoreArray[ClickTotal];
-				GamesWon.innerHTML = parseInt(GamesWon.innerHTML) + 1;
-				GamesPlayed.innerHTML = parseInt(GamesPlayed.innerHTML) + 1;
-				var WonPercent = (parseInt(GamesWon.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
-				document.getElementById("WonPercent").innerHTML = WonPercent.toFixed(1);
-				var LostPercent = (parseInt(GamesLost.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
-				document.getElementById("LostPercent").innerHTML = LostPercent.toFixed(1);
-				var HighScore = document.getElementById("HighScore");
-				if (ScoreArray[ClickTotal] > parseInt(HighScore.innerHTML)){
-					HighScore.innerHTML = ScoreArray[ClickTotal];
-				}
-				Winner();
-			} else {
-				if (ClickTotal == 25){
-					//game over
-					SelectorsEnabled = false;
-					GamesLost.innerHTML = parseInt(GamesLost.innerHTML) + 1;
-					GamesPlayed.innerHTML = parseInt(GamesPlayed.innerHTML) + 1;
-					var WonPercent = (parseInt(GamesWon.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
-					document.getElementById("WonPercent").innerHTML = WonPercent.toFixed(1);
-					var LostPercent = (parseInt(GamesLost.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
-					document.getElementById("LostPercent").innerHTML = LostPercent.toFixed(1);
-					Loser();
-				}
-			}
-		}
-	});
+	$("table.choices tr td").not("table.choices tr td.spacer").click(function(){ColorSelection(this);});
 });
