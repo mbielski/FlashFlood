@@ -1,11 +1,11 @@
-#Flash Flood
+# Flash Flood
 
 A simple game of colors. There are countless versions of this on the various markets. I became 
 hooked on it one day and decided that I needed to write one myself. This was somewhere near 8
 years ago. Fast-forward to today. This repo exists because I found the game code and decided
 that it needed an update but I also wanted to preserve my steps along the way.
 
-#Playing Flash Flood
+# Playing Flash Flood
 
 The general idea is to turn the whole board one color in 25 clicks or less. Start with the top
 left corner and choose what color should replace what is there. Pick one of the colors that 
@@ -17,7 +17,7 @@ choose next...
  - Click the 6 color squares at top left to change the flood color.
  - When you are done the Stats section will update with your results.
  
-#Copyright
+# Copyright
 
 Copyright (c) 2010 Michael Bielski. See LICENSE for details.
 
