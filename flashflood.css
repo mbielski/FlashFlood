@@ -1,0 +1,27 @@
+﻿body {font-size:14pt;}
+table.Layout {width:100%;}
+table.Layout tr td.colors, table.Layout tr td.stats {text-align:center; width:30%; vertical-align:top;}
+table.Layout tr td.board {padding:3px;}
+table.Layout tr td.board table.gameboard {margin-left:25%;border:1px solid gray;}
+table.Layout tr td.board table.gameboard tr td {width:30px;height:30px;}
+table.Layout tr td.colors table.choices {margin-left:25%;}
+table.Layout tr td.colors table.choices tr td.red, table.Layout tr td.colors table.choices tr td.pink, table.Layout tr td.colors table.choices tr td.blue, 
+table.Layout tr td.colors table.choices tr td.yellow, table.Layout tr td.colors table.choices tr td.purple, table.Layout tr td.colors table.choices tr td.green {border:1px solid gray;width:20px;height:20px;cursor:pointer;}
+table.Layout tr td.colors table.choices tr td.spacer {width:30px;height:30px;}
+table.Layout tr td.stats table {width:100%;}
+table.Layout tr td.stats table tr td {width:50%;}
+.red {background-color:Red;}
+.pink {background-color:Fuchsia;}
+.purple {background-color:Purple;}
+.blue {background-color:Blue;}
+.yellow {background-color:Yellow;}
+.green {background-color:Green;}
+.fakeLink {color:Blue; text-decoration:underline;cursor:pointer;}
+.bold {font-weight:bold;}
+.right {text-align:right;}
+.alertBox{position: absolute;top:45%;left:50%;margin-left:-150px;margin-top:-75px;width:300px;height:150px;z-index:100;color:black;border:solid 2px black;}
+.winner{background-color:#00FF00;text-align:center;}
+.loser{background-color:#FF3333;text-align:center;}
+.hide{display:none;}
+.padding5px{padding:5px;}
+.blueborder{border:solid 1px blue;}
