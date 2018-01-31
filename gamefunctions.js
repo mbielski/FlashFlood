@@ -3,7 +3,7 @@
 	BoardSize = 14,
     ScoreArray = [671088640, 335544320, 167772160, 83886080, 41943040, 20971520, 10485760, 5242880, 2621440, 1310720, 655360, 327680, 163840, 81920, 40960, 20480, 10240, 5120, 2560, 1280, 640, 320, 160, 80, 40, 20];
 
-function CreateBorad(){
+function CreateBoard(){
 	var Board, TableRow, TableCell, BoardTR, BoardTD;
 	Board = document.getElementById("GameBoard");
 
@@ -116,11 +116,12 @@ function Winner(){
 }
 
 function SetStats(winner){
-	var GamesPlayed, GamesWon, GamesLost, TotalScore, LastScore, HighScore;
+	var GamesPlayed, GamesWon, GamesLost, TotalScore, LastScore, HighScore, ClickTotal;
 	GamesPlayed = document.getElementById("GamesPlayed");
 	GamesWon = document.getElementById("GamesWon");
 	GamesLost = document.getElementById("GamesLost");
 	TotalScore = document.getElementById('TotalScore');
+	ClickTotal = parseInt($("#Counter").text());
 
 	SelectorsEnabled = false;
 	GamesPlayed.innerHTML = parseInt(GamesPlayed.innerHTML) + 1;
@@ -168,7 +169,7 @@ function ColorSelection(theCell){
 }
 
 $(document).ready(function(){
-	CreateBorad();
+	CreateBoard();
 	ResetBoard();
 	$("#resetBoard").click(function(){ResetBoard();});
 	$("#playFromLoss").click(function(){ResetBoard();});
