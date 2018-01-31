@@ -3,6 +3,20 @@
 	BoardSize = 14,
     ScoreArray = [671088640, 335544320, 167772160, 83886080, 41943040, 20971520, 10485760, 5242880, 2621440, 1310720, 655360, 327680, 163840, 81920, 40960, 20480, 10240, 5120, 2560, 1280, 640, 320, 160, 80, 40, 20];
 
+function CreateBorad(){
+	var Board, TableRow, TableCell, BoardTR, BoardTD;
+	Board = document.getElementById("GameBoard");
+
+	for (BoardTR = 0; BoardTR < BoardSize; BoardTR++){
+		TableRow = document.createElement('tr');
+		for (BoardTD = 0; BoardTD < BoardSize; BoardTD++){
+			TableCell = document.createElement('td');
+			TableRow.appendChild(TableCell);
+		}
+		Board.appendChild(TableRow);
+	}
+}
+
 function ResetBoard(){
 	var Board, ThisCell, BoardTR, BoardTD;
 	ClearAlert();
@@ -154,6 +168,7 @@ function ColorSelection(theCell){
 }
 
 $(document).ready(function(){
+	CreateBorad();
 	ResetBoard();
 	$("#resetBoard").click(function(){ResetBoard();});
 	$("#playFromLoss").click(function(){ResetBoard();});
