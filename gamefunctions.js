@@ -5,37 +5,38 @@
 
 function CreateBoard(){
 	var Board, TableRow, TableCell, BoardTR, BoardTD;
-	Board = document.getElementById("GameBoard");
+	Board = $("#GameBoard");
 
 	for (BoardTR = 0; BoardTR < BoardSize; BoardTR++){
-		TableRow = document.createElement('tr');
+		TableRow = $('<tr/>');
 		for (BoardTD = 0; BoardTD < BoardSize; BoardTD++){
-			TableCell = document.createElement('td');
-			TableRow.appendChild(TableCell);
+			TableCell = $('<td/>');
+			TableRow.append(TableCell);
 		}
-		Board.appendChild(TableRow);
+		Board.append(TableRow);
 	}
 }
 
 function ResetBoard(){
 	var Board, ThisCell, BoardTR, BoardTD;
 	ClearAlert();
-	Board = document.getElementById("GameBoard");
-	for (BoardTR = 0; BoardTR < BoardSize; BoardTR++){
-		for (BoardTD = 0; BoardTD < BoardSize; BoardTD++){
-			ThisCell = Board.rows[BoardTR].cells[BoardTD];
-			ThisCell.className = Colors[Math.floor(Math.random() * 6)];
-		}
-	}
+	Board = $("#GameBoard");
+	Board.find('tr').each(function(){
+		$(this).find('td').each(function(){
+			$(this).removeClass();
+			$(this).addClass(Colors[Math.floor(Math.random() * 6)]);
+		});
+	});
 	$("#Counter").text("0");
 	SelectorsEnabled = true;
 }
 
 function CheckBelow(RowID, ColumnID, ColorToUse, ColorToCheck){
-	var CellBelow;
+	var CellBelow, TheRow;
 	if (RowID + 1 < BoardSize){
-		CellBelow = document.getElementById("GameBoard").rows[RowID + 1].cells[ColumnID];
-		if (CellBelow.className == ColorToCheck && CellBelow.className != ColorToUse){
+		TheRow = $("#GameBoard").find('tr')[RowID + 1];
+		CellBelow = TheRow.cells[ColumnID];
+		if (CellBelow.className === ColorToCheck && CellBelow.className !== ColorToUse){
 			CellBelow.className = ColorToUse;
 			CheckBelow(RowID + 1, ColumnID, ColorToUse, ColorToCheck);
 			CheckRight(RowID + 1, ColumnID, ColorToUse, ColorToCheck);
@@ -46,11 +47,12 @@ function CheckBelow(RowID, ColumnID, ColorToUse, ColorToCheck){
 }
 
 function CheckAbove(RowID, ColumnID, ColorToUse, ColorToCheck){
-	var CellBelow
+	var CellAbove, TheRow;
 	if (RowID - 1 >= 0){
-		CellBelow = document.getElementById("GameBoard").rows[RowID - 1].cells[ColumnID];
-		if (CellBelow.className == ColorToCheck && CellBelow.className != ColorToUse){
-			CellBelow.className = ColorToUse;
+		TheRow = $("#GameBoard").find('tr')[RowID - 1];
+		CellAbove = TheRow.cells[ColumnID];
+		if (CellAbove.className === ColorToCheck && CellAbove.className !== ColorToUse){
+			CellAbove.className = ColorToUse;
 			CheckBelow(RowID - 1, ColumnID, ColorToUse, ColorToCheck);
 			CheckRight(RowID - 1, ColumnID, ColorToUse, ColorToCheck);
 			CheckAbove(RowID - 1, ColumnID, ColorToUse, ColorToCheck);
@@ -60,11 +62,12 @@ function CheckAbove(RowID, ColumnID, ColorToUse, ColorToCheck){
 }
 
 function CheckLeft(RowID, ColumnID, ColorToUse, ColorToCheck){
-	var CellRight;
+	var CellLeft, TheRow;
 	if (ColumnID - 1 >= 0){
-		CellRight = document.getElementById("GameBoard").rows[RowID].cells[ColumnID - 1];
-		if (CellRight.className == ColorToCheck && CellRight.className != ColorToUse){
-			CellRight.className = ColorToUse;
+		TheRow = $("#GameBoard").find('tr')[RowID];
+		CellLeft = TheRow.cells[ColumnID - 1];
+		if (CellLeft.className === ColorToCheck && CellLeft.className !== ColorToUse){
+			CellLeft.className = ColorToUse;
 			CheckBelow(RowID, ColumnID - 1, ColorToUse, ColorToCheck);
 			CheckRight(RowID, ColumnID - 1, ColorToUse, ColorToCheck);
 			CheckAbove(RowID, ColumnID - 1, ColorToUse, ColorToCheck);
@@ -74,10 +77,11 @@ function CheckLeft(RowID, ColumnID, ColorToUse, ColorToCheck){
 }
 
 function CheckRight(RowID, ColumnID, ColorToUse, ColorToCheck){
-	var CellRight;
+	var CellRight, TheRow;
 	if (ColumnID + 1 < BoardSize){
-		CellRight = document.getElementById("GameBoard").rows[RowID].cells[ColumnID + 1];
-		if (CellRight.className == ColorToCheck && CellRight.className != ColorToUse){
+		TheRow = $("#GameBoard").find('tr')[RowID];
+		CellRight = TheRow.cells[ColumnID + 1];
+		if (CellRight.className === ColorToCheck && CellRight.className !== ColorToUse){
 			CellRight.className = ColorToUse;
 			CheckBelow(RowID, ColumnID + 1, ColorToUse, ColorToCheck);
 			CheckRight(RowID, ColumnID + 1, ColorToUse, ColorToCheck);
@@ -90,20 +94,24 @@ function CheckRight(RowID, ColumnID, ColorToUse, ColorToCheck){
 function BoardFlooded(ColorToCheck){
 	var Board, IsFlooded, BoardTR, BoardTD;
 
-	Board = document.getElementById("GameBoard");
+	Board = $("#GameBoard");
 	IsFlooded = true;
 	for (BoardTR = 0; BoardTR < BoardSize; BoardTR++){
 		for (BoardTD = 0; BoardTD < BoardSize; BoardTD++){
-			if (Board.rows[BoardTR].cells[BoardTD].className != ColorToCheck){
-				IsFlooded = false;
-			}
+			Board.find('tr').each(function(){
+				$(this).find('td').each(function(){
+					if(!$(this).hasClass(ColorToCheck)){
+						IsFlooded = false;
+					}
+				});
+			});
 		}
 	}
 	return IsFlooded;
 }
 
 function ClearAlert(){
-	$("#loser").addClass("hide")
+	$("#loser").addClass("hide");
 	$("#winner").addClass("hide");
 }
 
@@ -116,52 +124,54 @@ function Winner(){
 }
 
 function SetStats(winner){
-	var GamesPlayed, GamesWon, GamesLost, TotalScore, LastScore, HighScore, ClickTotal;
-	GamesPlayed = document.getElementById("GamesPlayed");
-	GamesWon = document.getElementById("GamesWon");
-	GamesLost = document.getElementById("GamesLost");
-	TotalScore = document.getElementById('TotalScore');
+	var GamesPlayed, GamesWon, GamesLost, TotalScore, LastScore, HighScore, ClickTotal, WonPercent, LostPercent;
+	GamesPlayed = $("#GamesPlayed");
+	GamesWon = $("#GamesWon");
+	GamesLost = $("#GamesLost");
+	TotalScore = $('#TotalScore');
 	ClickTotal = parseInt($("#Counter").text());
+	LastScore = $('#LastScore');
+	HighScore = $('#HighScore');
 
 	SelectorsEnabled = false;
-	GamesPlayed.innerHTML = parseInt(GamesPlayed.innerHTML) + 1;
+	GamesPlayed.text(parseInt(GamesPlayed.text()) + 1);
 
 	if(winner){
-		TotalScore.innerHTML = parseInt(TotalScore.innerHTML) + ScoreArray[ClickTotal];
-		LastScore = document.getElementById("LastScore");
-		LastScore.innerHTML = ScoreArray[ClickTotal];
-		GamesWon.innerHTML = parseInt(GamesWon.innerHTML) + 1;
-		HighScore = document.getElementById("HighScore");
-		if (ScoreArray[ClickTotal] > parseInt(HighScore.innerHTML)){
-			HighScore.innerHTML = ScoreArray[ClickTotal];
+		TotalScore.text(parseInt(TotalScore.text()) + ScoreArray[ClickTotal]);
+		LastScore.text(ScoreArray[ClickTotal]);
+		GamesWon.text(parseInt(GamesWon.text()) + 1);
+		if (ScoreArray[ClickTotal] > parseInt(HighScore.text())){
+			HighScore.text(ScoreArray[ClickTotal]);
 		}
 		Winner();
 	} else {
-		GamesLost.innerHTML = parseInt(GamesLost.innerHTML) + 1;
+		GamesLost.text(parseInt(GamesLost.text()) + 1);
 		Loser();
 	}
 
-	WonPercent = (parseInt(GamesWon.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
-	document.getElementById("WonPercent").innerHTML = WonPercent.toFixed(1);
-	LostPercent = (parseInt(GamesLost.innerHTML) / parseInt(GamesPlayed.innerHTML)) * 100;
-	document.getElementById("LostPercent").innerHTML = LostPercent.toFixed(1);
+	WonPercent = (parseInt(GamesWon.text()) / parseInt(GamesPlayed.text())) * 100;
+	$("#WonPercent").text(WonPercent.toFixed(1));
+	LostPercent = (parseInt(GamesLost.text()) / parseInt(GamesPlayed.text())) * 100;
+	$("#LostPercent").text(LostPercent.toFixed(1));
 }
 
 function ColorSelection(theCell){
-	var HomeCell, ClickTotal;
-	HomeCell = document.getElementById("GameBoard").rows[0].cells[0];
-	if (HomeCell.className != theCell.className && SelectorsEnabled){
+	var HomeCell, ClickTotal, Counter, Board;
+	Board = $("#GameBoard").find('tr').find('td');
+	HomeCell = $(Board[0])[0];
+	if (HomeCell.className !== theCell.className && SelectorsEnabled){
 		CheckBelow(0, 0, theCell.className, HomeCell.className);
 		CheckRight(0, 0, theCell.className, HomeCell.className);
 		HomeCell.className = theCell.className;
-		ClickTotal = parseInt($("#Counter").text());
+		Counter = $("#Counter");
+		ClickTotal = parseInt(Counter.text());
 		ClickTotal++;
-		$("#Counter").text(ClickTotal);
+		Counter.text(ClickTotal);
 
 		if (BoardFlooded(theCell.className)){
 			SetStats(true);	//winner
 		} else {
-			if (ClickTotal == 25){
+			if (ClickTotal === 25){
 				SetStats(); //game over
 			}
 		}
